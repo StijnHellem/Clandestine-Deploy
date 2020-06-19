@@ -9,7 +9,7 @@ import { ReactComponent as Button } from './btnNewJourney.svg';
 const StartJourneyButton = () => {
   return (
     <div className={styles.buttonContainer}>
-    <Link className={styles.button} to={ROUTES.home}>
+    <Link className={styles.button} to={ROUTES.journeyDetail.path}>
       <Button/>
       Start new Journey
     </Link>
