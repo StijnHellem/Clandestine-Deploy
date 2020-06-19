@@ -6,18 +6,18 @@ use Slim\Routing\RouteCollectorProxy as RouteCollectorProxy;
 
 require __DIR__ . '/vendor/autoload.php';
 
-require __DIR__ . './dao/MemberDAO.php';
-require __DIR__ . './dao/ClanDAO.php';
-require __DIR__ . './dao/JourneyDAO.php';
-require __DIR__ . './dao/WayfarerDAO.php';
-require __DIR__ . './dao/RoleDAO.php';
-require __DIR__ . './dao/StoryDAO.php';
-require __DIR__ . './dao/TopMaskDAO.php';
-require __DIR__ . './dao/MiddleMaskDAO.php';
-require __DIR__ . './dao/BottomMaskDAO.php';
-require __DIR__ . './dao/WordDAO.php';
-require __DIR__ . './dao/DefinedWordDAO.php';
-require __DIR__ . './dao/DefinedStoryWordDAO.php';
+require __DIR__ . '/dao/MemberDAO.php';
+require __DIR__ . '/dao/ClanDAO.php';
+require __DIR__ . '/dao/JourneyDAO.php';
+require __DIR__ . '/dao/WayfarerDAO.php';
+require __DIR__ . '/dao/RoleDAO.php';
+require __DIR__ . '/dao/StoryDAO.php';
+require __DIR__ . '/dao/TopMaskDAO.php';
+require __DIR__ . '/dao/MiddleMaskDAO.php';
+require __DIR__ . '/dao/BottomMaskDAO.php';
+require __DIR__ . '/dao/WordDAO.php';
+require __DIR__ . '/dao/DefinedWordDAO.php';
+require __DIR__ . '/dao/DefinedStoryWordDAO.php';
 
 try {
   $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
