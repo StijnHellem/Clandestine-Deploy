@@ -1,12 +1,16 @@
 import React from "react";
-//import { Link } from "react-router-dom";
-//import PropTypes from "prop-types";
-
+import PageTitle from "../../components/PageTitle/PageTitle";
+import BackToJourney from "../../components/buttons/BackToJourney/BackToJourney"
+import Styles from "./StoryDetail.module.css"
 
 const StoryDetail = () => {
   return (
-   <p>story detail</p>
-   
+    <>
+    <header className={Styles.header}>
+      <BackToJourney />
+      <PageTitle title={"story 1"} subtext={"These are the words that heve been said in story one."}/>
+    </header>
+    </>
   );
 };
 

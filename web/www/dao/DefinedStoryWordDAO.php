@@ -28,12 +28,30 @@ class DefinedStoryWordDAO extends DAO {
   public function insert($data) {
     $errors = $this->getValidationErrors($data);
     if(empty($errors)) {
-      $sql = "INSERT INTO `definedstorywords` (`id`, `content`, `isReached`, `storyId`) VALUES (:id, :content, :isReached, :storyId)";
+      $sql = "INSERT INTO `definedstorywords` (`id`, `content`, `isReached`, `storyId`, `definedWordId`) VALUES (:id, :content, :isReached, :storyId, :definedWordId)";
       $stmt = $this->pdo->prepare($sql);
       $stmt->bindValue(':id', $data['id']);
       $stmt->bindValue(':content', $data['content']);
       $stmt->bindValue(':isReached', $data['isReached']);
       $stmt->bindValue(':storyId', $data['storyId']);
+      $stmt->bindValue(':definedWordId', $data['definedWordId']);
+      if($stmt->execute()) {
+        return $this->selectById($data['id']);
+      }
+    }
+    return false;
+  }
+
+  public function update($data) {
+    $errors = $this->getValidationErrors($data);
+    if(empty($errors)) {
+      $sql = "UPDATE `definedstorywords` SET `content` = :content, `isReached` = :isReached, `storyId` = :storyId, `definedWordId` = :definedWordId WHERE `id` = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->bindValue(':id', $data['id']);
+      $stmt->bindValue(':content', $data['content']);
+      $stmt->bindValue(':isReached', $data['isReached']);
+      $stmt->bindValue(':storyId', $data['storyId']);
+      $stmt->bindValue(':definedWordId', $data['definedWordId']);
       if($stmt->execute()) {
         return $this->selectById($data['id']);
       }
@@ -46,14 +64,17 @@ class DefinedStoryWordDAO extends DAO {
     if(!isset($data['id'])) {
       $errors['id'] = "Please fill in id";
     }
-    if(!isset($data['conetent'])) {
-      $errors['conetent'] = "Please fill in a conetent";
+    if(!isset($data['content'])) {
+      $errors['content'] = "Please fill in a content";
     }
     if(!isset($data['isReached'])) {
-        $errors['isReached'] = "Please fill in a isReached";
-      }
+      $errors['isReached'] = "Please fill in a isReached";
+    }
       if(!isset($data['storyId'])) {
         $errors['storyId'] = "Please fill in a storyId";
+      }
+      if(!isset($data['definedWordId'])) {
+        $errors['definedWordId'] = "Please fill in a definedWordId";
       }
     return $errors;
   }

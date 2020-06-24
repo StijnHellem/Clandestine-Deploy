@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 //import { Link } from "react-router-dom";
 //import PropTypes from "prop-types";
-
-
-
-
 import TheePotFlow from "../../components/buttons/Algemeen/TheePotFlow"
-
 
 import { useStore } from "../../hooks";
 import { useObserver } from "mobx-react-lite";
@@ -17,6 +12,7 @@ import ChooseRoles from "../../components/ChooseRoles";
 import ExploreRoles from "../../components/ExploreRoles/ExploreRoles";
 
 import { STATES } from "../../consts";
+import Loading from "../../components/Loading";
 
 const AddJourney = () => {
   const { uiStore, roleStore, clanStore, clanMemberStore, journeyStore, wayfarerStore } = useStore();
@@ -45,6 +41,7 @@ const AddJourney = () => {
   const [addWayfarerState, setState] = useState();
   
   return useObserver (() => {
+
     if (uiStore.addJourneyState === STATES.ADDJOURNEY_STATE_ADDWAYFARERS) {
       return <AddWayfarers onClick={setState}/> 
     }
@@ -86,7 +83,7 @@ const AddJourney = () => {
                 <li>Dit zijn alle clanMembers: {clanMember.name}</li>
           ))}
   </ul>
-  <button onClick={addWayfarer}>Add wayfarer</button>
+<button onClick={addWayfarer}>Add wayfarer</button>
 
       
   <p>Dit is de current clan name: {uiStore.currentClan ? uiStore.currentClan.name : "loading"}</p>

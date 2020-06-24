@@ -1,44 +1,66 @@
 @value tokens: "../../styles/tokens.module.css";
 @value title-font from tokens;
 
-.line {
-    width: 10rem;
-    height: 5rem;
-    border-top: 0.4rem solid #1B1A1A;
+.wheelPowerWrapper {
+    height: 70vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
 }
 
-.wave {
-    width: 10rem;
-    height: 5rem;
-    overflow: hidden; 
+.circle__wrapper {
+    grid-row: 1;
+    grid-column: 1;
+    place-self: center;
+
+    display: grid;
+    justify-content: center;
+    background-image: url("/assets/img/GAME/circle.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 30rem;
+    width: 30rem;
 }
 
-.wave:before {
-    content: "loaderloader";
-    position: relative;
-    top: -3.2rem;
-    width: calc(100% + 2.7rem);
-    font-size: 4rem;
-    color: white;
-    text-decoration-style: wavy;
-    text-decoration-color: #1B1A1A;
-    text-decoration-line: underline;
-    animation: animate .5s linear infinite;
+.recognitionCircle {
+    grid-row: 1;
+    grid-column: 1;
+    place-self: center;
 }
 
-@keyframes animate {
-    0%{
-        right: 0;
-    }
-
-    100%{
-        right: 2rem;
-    }
+.arrow {
+    grid-row: 1;
+    grid-column: 1;
+    place-self: center;
+    margin-top: -37rem;
+    z-index: 1;
 }
 
-.toggle__btn {
-    border: none;
-    background-color: white;
+.wayfarersList {
+    grid-row: 1;
+    grid-column: 1;
+    place-self: center;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 20rem;
+}
+
+.wayfarersListItem {
+    position: absolute;
+    z-index: 0;
+}
+
+
+.wordSvg{
+    position: absolute;
+    grid-row: 1;
+    grid-column: 1;
+    place-self: center;
+    background-color: lightcoral;
+
 }
 
 .word {
@@ -46,7 +68,8 @@
     font-weight: bold;
 }
 
-.circle__wrapper {
-    display: flex;
-    justify-content: center;
+.button {
+    composes: button from "../../styles/uiControls.module.css";
+
+
 }

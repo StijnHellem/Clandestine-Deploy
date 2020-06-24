@@ -1,6 +1,7 @@
 import RestService from "../services/RestService";
 import { decorate, observable, action } from "mobx";
-import DefinedStoryWordModel from "../models/DefinedWordModel";
+import DefinedStoryWordModel from "../models/DefinedStoryWordModel";
+import { v4 } from "uuid";
 
 
 class DefinedStoryWordStore {
@@ -11,19 +12,37 @@ class DefinedStoryWordStore {
   }
 
   createDefinedStoryWord = async definedStoryWord => {
+    console.log("______________ IK CREATE")
+    console.log(definedStoryWord);
   const json = await this.definedStoryWordsService.create(definedStoryWord);
+  console.log(json)
+  console.log("______________ IK CREATE JSON HIERBOVEN")
   this.updateDefinedStoryWordFromServer(json);
   }
 
-  loadAllDefinedStoryWords = async () => {
-    //const jsonDefinedStoryWords = await this.groupsService.getAll();
-    const fakeJsonDefinedStoryWords = [
+  updateDefinedStoryWord = async definedStoryWord => {
+    console.log(definedStoryWord); // model 
+    const json = await this.definedStoryWordsService.update(definedStoryWord);
+    console.log(json); // undefined
+    this.updateDefinedStoryWordFromServer(json);
+  }
 
-      ]
-
-
-      fakeJsonDefinedStoryWords.forEach(json => this.updateDefinedStoryWordFromServer(json));
+  updateLinkedUsers = async groupWithUsers => {
+    const jsonUsers = await this.groupsService.updateLinked(groupWithUsers, 'users');
+    this.updateGroupFromServer({ id: groupWithUsers.id, users: jsonUsers });
+    return this.resolveGroup(groupWithUsers.id);
   };
+
+  loadAllDefinedStoryWords = async () => {
+    console.log("im loading all dfsw")
+    const jsonDefinedStoryWords = await this.definedStoryWordsService.getAll();
+    console.log(jsonDefinedStoryWords)
+    jsonDefinedStoryWords.forEach(json => this.updateDefinedStoryWordFromServer(json));
+    return jsonDefinedStoryWords
+  };
+
+
+
 
   loadDefinedStoryWord = async (id) => {
     const jsonDefinedStoryWord = await this.groupsService.getById(id);
@@ -32,21 +51,27 @@ class DefinedStoryWordStore {
   };
 
   updateDefinedStoryWordFromServer(json) {
-     let definedStoryWord = this.definedStoryWords.find(definedStoryWord => definedStoryWord.id === json.id);
+    let fromServere = false;
+    let definedStoryWord = this.definedStoryWords.find(definedStoryWord => definedStoryWord.id === json.id);
+      console.log("_________________ IK CHECK EN LOG ONDER MIJ ZOU EEN MODEL MOETEN ZIJN")
+     console.log(definedStoryWord)
      if (!definedStoryWord) {
-        
+        fromServere = true;
+        console.log("________ DIT NIET ZIEN")
         definedStoryWord = new DefinedStoryWordModel({
             id: json.id, 
             content: json.content,
-            definedStoryWordId: json.definedStoryWordId,
+            isReached: json.isReached,
             storyId: json.storyId,
-            store: this.rootStore.definedStoryWordStore
+            definedWordId: json.definedWordId,
+            store: this
         });
-
+      
      }
      if (json.isDeleted) {
        this.definedStoryWords.remove(definedStoryWord);
-     } else {
+     } else if(fromServere === true){
+       console.log("______ IK GA UPDATEN IN JSON")
        definedStoryWord.updateFromJson(json);
      }
      return definedStoryWord;
@@ -54,7 +79,7 @@ class DefinedStoryWordStore {
 
   resolveDefinedStoryWord = id => this.definedStoryWords.find(definedStoryWord => definedStoryWord.id === id);
 
-  addDefinedStoryWord(definedStoryWord){
+  addDefinedStoryWord = (definedStoryWord) => {
       this.definedStoryWords.push(definedStoryWord);
   }
 }

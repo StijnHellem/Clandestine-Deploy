@@ -1,93 +1,99 @@
-import { decorate, action, computed, observable } from "mobx";
+import { decorate, action, computed, observable, set } from "mobx";
 import { v4 } from "uuid";
 
 class ClanMemberModel {
-    constructor({ id = v4(), store, ...json }){
-           this.id = id;
-          if (!store) {
-            throw new Error("A member needs a store");
-          }
+  constructor({ id = v4(), name, age, clanId, topMaskId, middleMaskId, bottomMaskId, store }) {
+    this.id = id;
+    if (!store) {
+      throw new Error("A member needs a store");
+    }
 
-          this.store = store;
-       
-          //this.journeys = [];
-          this.wayfarers = [];
-          
-          this.updateFromJson(json);
-          this.store.addClanMember(this);
-      
-        }
-
-        setClan(clan){
-          if(clan){
-            console.log("hieronder de geresovled clan")
-            console.log(clan.id)
-            this.clanId = clan.id;
-            this.clan.linkClanMember(this);
-          }
-        }
-
-        setTopMask(topMask){
-          console.log(topMask)
-          this.topMaskId = topMask.id;
-        }
-
-        setMiddleMask(middleMask){
-          console.log(middleMask)
-          this.middleMaskId = middleMask.id;
-        }
-
-        setBottomMask(bottomMask){
-          console.log(bottomMask)
-          this.bottomMaskId = bottomMask.id;
-        }
-       //linkJourney(journey){
-       //  !this.journeys.includes(journey) && this.journeys.push(journey);
-       //}
-
-        linkWayfarer(wayfarer){
-          !this.wayfarers.includes(wayfarer) && this.wayfarers.push(wayfarer);
-        }
-
-        create = async () => this.store.createClanMember(this.asJson);
-        update = async () => this.store.updateUser(this.asJson);
-        delete = async () => this.store.deleteUser(this.asJson);
+    this.store = store;
+    this.topMaskId = topMaskId;
+    this.middleMaskId = middleMaskId;
+    this.bottomMaskId = bottomMaskId;
+    this.name = name;
+    this.age = age;
+    this.clanId = clanId;
+    //this.journeys = [];
+    this.wayfarers = [];
 
 
-        updateFromJson({ name, age , topMaskId, middleMaskId, bottomMaskId, clanId }){
-         
-          this.setClan(this.store.rootStore.clanStore.resolveClan(clanId));
-          this.setTopMask(this.store.rootStore.topMaskStore.resolveTopMask(topMaskId));
-          this.setMiddleMask(this.store.rootStore.middleMaskStore.resolveMiddleMask(middleMaskId));
-          this.setBottomMask(this.store.rootStore.bottomMaskStore.resolveBottomMask(bottomMaskId));
-          
-          this.name = name;
-          this.age = age;
+    this.store.addClanMember(this);
 
+  }
+
+  setClan(clan) {
+    if (clan) {
+      this.clanId = clan.id;
+      clan.linkClanMember(this);
+    }
+  }
+
+  setTopMask(topMask) {
     
-          
+    this.topMaskId = topMask.id;
+  }
 
-         // this.journeys = journeys;
-          //this.store.journeyStore.resolveJourney().linkClanMember(this)
+  setMiddleMask(middleMask) {
+    this.middleMaskId = middleMask.id;
+  }
 
-        };
-        get clan() {
-          return this.store.rootStore.clanStore.resolveClan(this.clanId);
-        }
+  setBottomMask(bottomMask) {
+    this.bottomMaskId = bottomMask.id;
+  }
+  //linkJourney(journey){
+  //  !this.journeys.includes(journey) && this.journeys.push(journey);
+  //}
 
-        get asJson() {
-            return {
-              id: this.id,
-              name: this.name,
-              clanId: this.clanId,
-              topMaskId: this.topMaskId,
-              middleMaskId: this.middleMaskId,
-              bottomMaskId: this.bottomMaskId
-              //age: this.age,
-              //avatar: this.avatar,
-              //journeys: this.journeys
-            };
-          }
+  setAge(age) {
+    this.age = age;
+  }
+
+  setNickname(nickname) {
+    this.name = nickname;
+  }
+
+  linkWayfarer(wayfarer) {
+    !this.wayfarers.includes(wayfarer) && this.wayfarers.push(wayfarer);
+  }
+
+  create = async () => this.store.createClanMember(this.asJson);
+  update = async () => this.store.updateClanMember(this.asJson);
+  delete = async () => this.store.deleteClanMember(this.asJson);
+
+
+  updateFromJson({ name, age, topMaskId, middleMaskId, bottomMaskId, clanId }) {
+
+    //console.log(topMaskId.toString());
+
+    this.setClan(this.store.rootStore.clanStore.resolveClan(clanId));
+   
+    if (topMaskId !== undefined) {
+      this.setTopMask(this.store.rootStore.topMaskStore.resolveTopMask(topMaskId.toString()));
+      this.setMiddleMask(this.store.rootStore.middleMaskStore.resolveMiddleMask(middleMaskId.toString()));
+      this.setBottomMask(this.store.rootStore.bottomMaskStore.resolveBottomMask(bottomMaskId.toString()));
+    }
+    this.name = name;
+    this.age = age;
+
+
+  };
+  get clan() {
+    return this.store.rootStore.clanStore.resolveClan(this.clanId);
+  }
+
+  get asJson() {
+    return {
+      id: this.id,
+      name: this.name,
+      age: this.age,
+      clanId: this.clanId,
+      topMaskId: this.topMaskId,
+      middleMaskId: this.middleMaskId,
+      bottomMaskId: this.bottomMaskId
+    };
+  }
 }
 
 decorate(ClanMemberModel, {
@@ -102,7 +108,11 @@ decorate(ClanMemberModel, {
   setBottomMask: action,
   topMaskId: observable,
   middleMaskId: observable,
-  bottomMaskId: observable
- });
+  bottomMaskId: observable,
+  setAge: action,
+  setNickname: action,
+  age: observable,
+  name: observable
+});
 
 export default ClanMemberModel;

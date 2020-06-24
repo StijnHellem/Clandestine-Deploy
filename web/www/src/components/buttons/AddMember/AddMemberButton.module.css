@@ -5,7 +5,13 @@
   align-items: center;
   text-align: center;
   width: 10rem;
-  height: 16rem;
+  z-index: 1;
+}
+
+.addMemberButton {
+  z-index: 2;
+  composes: button from "../../../styles/uiControls.module.css";
+
 }
 
 .button_title {
